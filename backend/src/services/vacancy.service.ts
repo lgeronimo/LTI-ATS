@@ -13,7 +13,6 @@ export class VacancyService {
     requirements: string;
     application_deadline: Date;
     recruiter_id: number;
-    status_id?: number;
   }): Promise<Vacancy> {
     try {
       return await this.prisma.vacancy.create({
@@ -22,12 +21,12 @@ export class VacancyService {
           description: vacancyData.description,
           requirements: vacancyData.requirements,
           application_deadline: new Date(vacancyData.application_deadline),
-          recruiter_id: vacancyData.recruiter_id,
-          status_id: vacancyData.status_id || 1
+          recruiter_id: vacancyData.recruiter_id || 1
         }
       });
     } catch (error) {
       console.error('Error al crear la vacante:', error);
+      alert(error)
       throw error;
     }
   }
