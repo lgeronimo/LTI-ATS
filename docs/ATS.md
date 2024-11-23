@@ -160,7 +160,7 @@ A continuación te detallo cada uno de los casos de uso con el formato estándar
 
 ### **1. Crear Vacante**
 
-**Actor Principal**: Reclutador
+**Actor Principal**: Usuario
 
 **Actores Secundarios**: Ninguno
 
