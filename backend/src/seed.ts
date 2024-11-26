@@ -1,42 +1,54 @@
 import { PrismaClient } from '@prisma/client';
-import { VacancyStatus } from './models/enums/vacancy-status.enum';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  // Check if VacancyStatus records already exist
-  const existingStatuses = await prisma.vacancyStatus.findMany();
-  if (existingStatuses.length === 0) {
-    // Create VacancyStatus records if none exist
-    await prisma.vacancyStatus.createMany({
-      data: [
-        { id: VacancyStatus.Active, name: 'Active' },
-        { id: VacancyStatus.Closed, name: 'Closed' },
-        { id: VacancyStatus.InProcess, name: 'In Process' },
-        { id: VacancyStatus.Canceled, name: 'Canceled' },
-        { id: VacancyStatus.Paused, name: 'Paused' },
-      ],
+
+  // Check if User records already exist
+  const existingUsers = await prisma.user.findMany();
+  if (existingUsers.length === 0) {
+    // Create User records if none exist
+    await prisma.user.create({
+      data: {
+        email: 'recruiter@example.com',
+        password: '123456789',
+        role: 'RECRUITER',
+        recruiter: {
+          create: {
+            name: 'Luis Gerónimo',
+            email: 'recruiter@example.com',
+            phone: '5537102770',
+          },
+        },
+      },
     });
-    console.log('VacancyStatus seeded successfully!');
+    console.log('Default recruiter user seeded successfully!');
   } else {
-    console.log('VacancyStatus already exists, skipping seeding.');
+    console.log('Users already exist, skipping seeding.');
   }
 
-  // Check if Recruiter records already exist
-  const existingRecruiters = await prisma.recruiter.findMany();
-  if (existingRecruiters.length === 0) {
-    // Create Recruiter records if none exist
-    await prisma.recruiter.createMany({
-      data: [
-        { name: 'Luis Gerónimo Recruiter', email: 'luis.geronimov@gmail.com', phone: '5537102770' },
-      ],
-    });
-    console.log('Recruiters seeded successfully!');
+  // Recuperar el usuario que acabamos de agregar
+  const newUser = await prisma.user.findUnique({
+    where: {
+      email: 'recruiter@example.com',
+    },
+    include: {
+      recruiter: true,
+    },
+  });
+
+  if (newUser) {
+    console.log('Usuario recuperado:', newUser);
+    if (newUser.recruiter) {
+      console.log('Datos del recruiter:', newUser.recruiter);
+    } else {
+      console.log('No se encontraron datos del recruiter.');
+    }
   } else {
-    console.log('Recruiters already exist, skipping seeding.');
+    console.log('No se pudo recuperar el usuario.');
   }
+
 }
-
 main()
   .catch(e => {
     console.error(e);
@@ -44,4 +56,4 @@ main()
   })
   .finally(async () => {
     await prisma.$disconnect();
-  }); 
+  });

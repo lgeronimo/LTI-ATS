@@ -7,18 +7,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Vacancy {
-  id                    Int           @id @default(autoincrement())
-  title                 String
-  description           String
-  requirements          String
-  application_deadline  DateTime
-  status_id             Int           @default(1)
-  creation_date         DateTime      @default(now())
-  update_date           DateTime      @updatedAt
-  recruiter_id          Int
-  status                VacancyStatus @relation(fields: [status_id], references: [id])
-  recruiter             Recruiter     @relation(fields: [recruiter_id], references: [id])
+enum RoleType {
+  ADMIN
+  RECRUITER
+}
+
+enum VacancyStatusType {
+  ACTIVE
+  CLOSED
+  IN_PROCESS
+  CANCELED
+  PAUSED
+}
+
+model User {
+  id            Int        @id @default(autoincrement())
+  email         String     @unique
+  password      String
+  role          RoleType   @default(RECRUITER)
+  creation_date DateTime   @default(now())
+  update_date   DateTime   @updatedAt
+  recruiter     Recruiter? @relation
 }
 
 model Recruiter {
@@ -29,12 +38,20 @@ model Recruiter {
   creation_date DateTime  @default(now())
   update_date   DateTime  @updatedAt
   vacancies     Vacancy[]
+  user          User      @relation(fields: [userId], references: [id])
+  userId        Int       @unique
 }
 
-model VacancyStatus {
-  id            Int       @id @default(autoincrement())
-  name          String    @unique
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  vacancies     Vacancy[]
+model Vacancy {
+  id                   Int           @id @default(autoincrement())
+  title                String
+  description          String
+  requirements         String
+  application_deadline DateTime
+  status_id            Int           @default(1)
+  creation_date        DateTime      @default(now())
+  update_date          DateTime      @updatedAt
+  recruiter_id         Int
+  status               VacancyStatusType @default(ACTIVE)
+  recruiter            Recruiter         @relation(fields: [recruiter_id], references: [id])
 }

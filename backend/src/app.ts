@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import vacancyRoutes from './routes/vacancy.routes';
+import authRoutes from './routes/auth.routes';
 
 const app = express();
 
@@ -11,6 +12,7 @@ app.use(cors({
 }));
 app.use(express.json());
 
+app.use('/api/auth', authRoutes);
 app.use('/api/vacancies', vacancyRoutes);
 
 // Middleware to handle not found routes
@@ -20,6 +22,5 @@ app.use((req, res, next) => {
     message: 'Ruta no encontrada',
   });
 });
-
 
 export default app;
