@@ -1,7 +1,7 @@
 export enum VacancyStatus {
-  Active = 1,
-  Closed = 2,
-  InProcess = 3,
-  Canceled = 4,
-  Paused = 5
-} 
+  ACTIVE = 'ACTIVE',
+  CLOSED = 'CLOSED',
+  IN_PROCESS = 'IN_PROCESS',
+  CANCELED = 'CANCELED',
+  PAUSED = 'PAUSED'
+}

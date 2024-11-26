@@ -44,13 +44,9 @@ export class VacancyController {
   getVacancies = async (_req: Request, res: Response): Promise<void> => {
     try {
       const vacancies = await this.vacancyService.getVacancies();
-      res.status(200).json({
-        success: true,
-        data: vacancies
-      });
+      res.status(200).json(vacancies);
     } catch (error) {
       res.status(500).json({ 
-        success: false,
         message: 'Error al obtener las vacantes',
         error: error instanceof Error ? error.message : 'Error desconocido'
       });
@@ -79,14 +75,23 @@ export class VacancyController {
         return;
       }
 
-      res.status(200).json({
-        success: true,
-        data: vacancy
-      });
+      res.status(200).json(vacancy);
     } catch (error) {
       res.status(500).json({ 
         success: false,
         message: 'Error al obtener la vacante',
+        error: error instanceof Error ? error.message : 'Error desconocido'
+      });
+    }
+  };
+
+  getActiveVacancies = async (_req: Request, res: Response): Promise<void> => {
+    try {
+      const activeVacancies = await this.vacancyService.getActiveVacancies();
+      res.status(200).json(activeVacancies);
+    } catch (error) {
+      res.status(500).json({
+        message: 'Error al obtener las vacantes activas',
         error: error instanceof Error ? error.message : 'Error desconocido'
       });
     }

@@ -1,4 +1,5 @@
 import { PrismaClient, Vacancy } from '@prisma/client';
+import { VacancyStatus } from '../models/enums/vacancy-status.enum';
 
 export class VacancyService {
   private prisma: PrismaClient;
@@ -25,8 +26,8 @@ export class VacancyService {
         }
       });
     } catch (error) {
-      console.error('Error al crear la vacante:', error);
-      alert(error)
+      console.error('Error creating vacancy:', error);
+      alert(error);
       throw error;
     }
   }
@@ -35,15 +36,14 @@ export class VacancyService {
     try {
       return await this.prisma.vacancy.findMany({
         include: {
-          status: true,
-          recruiter: true
+          recruiter: false
         },
         orderBy: {
           creation_date: 'desc'
         }
       });
     } catch (error) {
-      console.error('Error al obtener las vacantes:', error);
+      console.error('Error fetching vacancies:', error);
       throw error;
     }
   }
@@ -53,13 +53,36 @@ export class VacancyService {
       return await this.prisma.vacancy.findUnique({
         where: { id },
         include: {
-          status: true,
           recruiter: true
         }
       });
     } catch (error) {
-      console.error('Error al obtener la vacante por ID:', error);
+      console.error('Error fetching vacancy by ID:', error);
       throw error;
     }
   }
+
+  async getActiveVacancies(): Promise<Vacancy[]> {
+    try {
+      const currentDate = new Date();
+      return await this.prisma.vacancy.findMany({
+        where: {
+          status: VacancyStatus.ACTIVE,
+          application_deadline: {
+            gte: currentDate
+          }
+        },
+        include: {
+          recruiter: false
+        },
+        orderBy: {
+          creation_date: 'desc'
+        }
+      });
+    } catch (error) {
+      console.error('Error fetching active vacancies:', error);
+      throw error;
+    }
+  }
+  
 }

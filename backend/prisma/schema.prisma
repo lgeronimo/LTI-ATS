@@ -48,7 +48,6 @@ model Vacancy {
   description          String
   requirements         String
   application_deadline DateTime
-  status_id            Int           @default(1)
   creation_date        DateTime      @default(now())
   update_date          DateTime      @updatedAt
   recruiter_id         Int
