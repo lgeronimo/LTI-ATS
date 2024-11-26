@@ -23,8 +23,9 @@ prisma/dev.db
 .vscode/
 .idea/
 
-# OS generated files
-.DS_Store
-backend/.DS_Store
-frontend/.DS_Store
+
 Thumbs.db
+
+# Exclude .DS_Store files from being staged
+*.DS_Store
+**/.DS_Store
