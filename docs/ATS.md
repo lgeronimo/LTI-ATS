@@ -158,6 +158,43 @@ A continuación te detallo cada uno de los casos de uso con el formato estándar
 
 ---
 
+### **0. Iniciar Sesión**
+
+**Actor Principal**: Reclutador
+
+**Actores Secundarios**: Ninguno
+
+**Precondiciones**:
+- El reclutador debe tener una cuenta registrada en el sistema.
+
+**Postcondiciones**:
+- El reclutador es autenticado y redirigido a su panel correspondiente.
+
+**Flujo Principal**:
+1. El reclutador accede a la página de inicio de sesión.
+2. El reclutador ingresa su correo electrónico y contraseña.
+3. El reclutador hace clic en el botón "Iniciar Sesión".
+4. El sistema valida las credenciales.
+5. Si las credenciales son válidas, el reclutador es redirigido a su panel de control.
+6. Si las credenciales son inválidas, se muestra un mensaje de error.
+
+**Flujos Alternos**:
+- **Flujo Alterno 1 (Error en el inicio de sesión)**: Si el reclutador ingresa un correo electrónico o contraseña incorrectos, se muestra un mensaje de error indicando que las credenciales son inválidas.
+
+**Excepciones**:
+- El sistema no está disponible debido a problemas técnicos.
+
+**Diagrama de Caso de Uso (Mermaid)**:
+```mermaid
+usecaseDiagram
+  actor Reclutador
+  Reclutador --> (Iniciar Sesión)
+  (Iniciar Sesión) --> (Validar Credenciales)
+  (Iniciar Sesión) --> (Redirigir a Panel)
+```
+
+---
+
 ### **1. Crear Vacante**
 
 **Actor Principal**: Usuario
@@ -419,9 +456,7 @@ usecaseDiagram
 **Postcondiciones**:
 - El sistema proporciona un análisis del tono de la entrevista.
 
-**Flujo
-
- Principal**:
+**Flujo Principal**:
 1. El sistema recibe la grabación de la entrevista.
 2. El sistema realiza un análisis de tono utilizando técnicas de procesamiento de lenguaje natural.
 3. El sistema genera un informe con los resultados del análisis.
